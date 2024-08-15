@@ -1,0 +1,50 @@
+@import "../../../../styles.scss";
+
+.card-container {
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 282px;
+  height: 580px;
+  color: #344054;
+}
+
+.image-container {
+  height: 257px;
+  width: 282px;
+  border-radius: 8;
+  overflow: hidden;
+}
+
+.card-info-container {
+  padding: 16px;
+
+  h3 {
+    margin-top: 0;
+    margin-bottom: 8px;
+  }
+
+  p {
+    margin-top: 0;
+    margin-bottom: 24px;
+  }
+}
+
+.card-info-item {
+  display: flex;
+}
+
+.discount-container {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 21px;
+}
+
+button {
+  width: 100%;
+  padding: 14px 71.5px;
+  border: none;
+  background-color: $primary-color;
+  font-weight: 700;
+  border-radius: 8px;
+}

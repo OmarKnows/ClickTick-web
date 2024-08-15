@@ -1,1 +1,15 @@
-<p>products works!</p>
+<div class="products-page-container">
+  <h1>{{ pageTitle }}</h1>
+  <h5>{{ crumbs }}</h5>
+  <div class="flex-container">
+    <app-category-radio-group />
+    <div class="products-column">
+      <div class="products-grid">
+        @for(product of tempProducts; track $index){
+        <app-card [product]="product" />
+        }
+      </div>
+      <app-paginator />
+    </div>
+  </div>
+</div>

@@ -1,0 +1,26 @@
+<div class="card-container">
+  <div class="image-container">
+    <img [src]="product().thumbnail" alt="thumbnail" />
+  </div>
+  <div class="card-info-container">
+    <h3>{{ product().title }}</h3>
+    <p>{{ product().description }}</p>
+    <div class="discount-container">
+      <del>{{ product().price }} USD</del>
+      <p>{{ product().price }} USD</p>
+    </div>
+    <div class="card-info-item">
+      <label>Brand:</label>
+      <p>{{ product().brand }}</p>
+    </div>
+    <div class="card-info-item">
+      <label>Category:</label>
+      <p>{{ product().category }}</p>
+    </div>
+    <div class="card-info-item">
+      <label>In Stock:</label>
+      <p>{{ product().stock }}</p>
+    </div>
+    <button>ADD TO CART</button>
+  </div>
+</div>
