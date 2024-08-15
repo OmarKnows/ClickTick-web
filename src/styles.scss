@@ -10,6 +10,7 @@ $border-color: #999999;
 
 body {
   font-family: "Inter", sans-serif;
+  height: 100%;
   margin: 0;
 }
 
@@ -21,4 +22,21 @@ img {
 
 .right {
   margin-inline-start: auto;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #a4b8c4;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $primary-color;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: $primary-color;
 }
