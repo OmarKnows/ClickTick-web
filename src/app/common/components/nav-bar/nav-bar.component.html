@@ -1,0 +1,24 @@
+<header>
+  <div class="logo-container">
+    <div>
+      <img src="assets/logo.svg" alt="logo" />
+    </div>
+    <p>ClickTick</p>
+  </div>
+  <a>Home</a>
+  @if(tempLoggedIn){
+  <div class="search-input right">
+    <div>
+      <img src="assets/icons/search.svg" />
+    </div>
+    <input placeholder="Search" />
+  </div>
+  <div class="cart-container">
+    <img src="assets/icons/cart.svg" />
+    <div class="cart-item-counter">{{ tempCartItems }}</div>
+  </div>
+  <a>Account</a>
+  } @else {
+  <a class="right">Log in</a>
+  }
+</header>
