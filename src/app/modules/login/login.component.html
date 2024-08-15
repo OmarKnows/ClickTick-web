@@ -1,1 +1,18 @@
-<p>login works!</p>
+<div class="login-page-container">
+  <div class="logo-container">
+    <img src="assets/logo.svg" alt="" />
+  </div>
+  <h1>Log in to your account</h1>
+  <h3>Welcome back! Please enter your details.</h3>
+  <form>
+    <div>
+      <label>Email</label>
+      <input type="email" placeholder="Enter your email" />
+    </div>
+    <div>
+      <label>Password</label>
+      <input type="password" placeholder="••••••••" />
+    </div>
+    <button type="button" [routerLink]="productsUrl">Sign In</button>
+  </form>
+</div>
