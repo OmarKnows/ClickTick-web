@@ -19,3 +19,9 @@ interface IReview {
   reviewerName: string;
   reviewerEmail: string;
 }
+
+export interface ICategory {
+  slug: string;
+  name: string;
+  url: string;
+}

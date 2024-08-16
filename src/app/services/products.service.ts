@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { catchError, tap, throwError } from 'rxjs';
-import { IProduct } from '../common/models/product.model';
+import { ICategory, IProduct } from '../common/models/product.model';
 import { IPaginationParams, IResponse } from '../common/types';
 import { EApi } from '../constants/api';
 import { CachingService } from './caching.service';
@@ -27,6 +27,22 @@ export class ProductsService {
       return cachedResponse;
     } else {
       return this.httpClient.get<IResponse<IProduct, 'products'>>(url).pipe(
+        tap((response) => this.cachingService.set(url, response)),
+        catchError((error: any) => {
+          return throwError(() => new Error(error.message));
+        })
+      );
+    }
+  }
+
+  listCategories() {
+    const url = EApi.PRODUCTS + EApi.CATEGORIES;
+    const cachedResponse = this.cachingService.get(url);
+
+    if (cachedResponse) {
+      return cachedResponse;
+    } else {
+      return this.httpClient.get<ICategory[]>(url).pipe(
         tap((response) => this.cachingService.set(url, response)),
         catchError((error: any) => {
           return throwError(() => new Error(error.message));
