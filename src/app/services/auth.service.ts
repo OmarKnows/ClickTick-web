@@ -1,42 +1,66 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { catchError, tap, throwError } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, catchError, map, Observable, of } from 'rxjs';
+import { IAuthResponse } from '../common/models/auth.model';
 import { EApi } from '../constants/api';
 import { ELocalStorage } from '../constants/local-storage';
-import { IAuthResponse } from '../common/models/auth.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private httpClient = inject(HttpClient);
+  private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
 
-  login(username: string, password: string) {
-    return this.httpClient
+  constructor(private http: HttpClient) {
+    this.isAuthenticatedSubject.next(this.hasToken());
+  }
+
+  isLoggedIn(): boolean {
+    const token = localStorage.getItem(ELocalStorage.ACCESS_TOKEN);
+    return !!token && !this.isTokenExpired(ELocalStorage.ACCESS_TOKEN);
+  }
+
+  private isTokenExpired(token: string): boolean {
+    const expiry = JSON.parse(atob(token.split('.')[1])).exp;
+    return Math.floor(new Date().getTime() / 1000) >= expiry;
+  }
+
+  login(username: string, password: string): Observable<boolean> {
+    return this.http
       .post<IAuthResponse>(EApi.AUTH + EApi.LOGIN, {
         username,
         password,
       })
       .pipe(
-        tap((response: IAuthResponse) => {
-          console.log(response);
-          localStorage.setItem(ELocalStorage.ACCESS_TOKEN, response.token);
-          localStorage.setItem(
-            ELocalStorage.REFRESH_TOKEN,
-            response.refreshToken
-          );
+        map((response) => {
+          this.storeTokens(response.token, response.refreshToken);
+          this.isAuthenticatedSubject.next(true);
+          return true;
         }),
-        catchError((error: any) => {
-          console.log(error);
-          return throwError(
-            () => new Error('An error occurred while logging in')
-          );
-        })
+        catchError(() => of(false))
       );
   }
 
-  logout() {
+  logout(): void {
+    this.removeTokens();
+    this.isAuthenticatedSubject.next(false);
+  }
+
+  isAuthenticated(): Observable<boolean> {
+    return this.isAuthenticatedSubject.asObservable();
+  }
+
+  private storeTokens(accessToken: string, refreshToken: string): void {
+    localStorage.setItem(ELocalStorage.ACCESS_TOKEN, accessToken);
+    localStorage.setItem(ELocalStorage.REFRESH_TOKEN, refreshToken);
+  }
+
+  private removeTokens(): void {
     localStorage.removeItem(ELocalStorage.ACCESS_TOKEN);
     localStorage.removeItem(ELocalStorage.REFRESH_TOKEN);
+  }
+
+  private hasToken(): boolean {
+    return !!localStorage.getItem(ELocalStorage.ACCESS_TOKEN);
   }
 }
