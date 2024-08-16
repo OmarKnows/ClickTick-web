@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { ROUTES } from '../../constants/routes';
+import { ERoutes } from '../../constants/routes';
 
 @Component({
   selector: 'app-login',
@@ -10,5 +10,5 @@ import { ROUTES } from '../../constants/routes';
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
-  productsUrl = ROUTES.PRODUCTS;
+  productsUrl = ERoutes.PRODUCTS;
 }

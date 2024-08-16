@@ -1,4 +1,4 @@
-export enum ROUTES {
+export enum ERoutes {
   LOGIN = '',
   PRODUCTS = 'products',
 }
