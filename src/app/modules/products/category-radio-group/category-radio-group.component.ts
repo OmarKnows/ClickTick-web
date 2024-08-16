@@ -8,7 +8,6 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { categories } from './tempCategories';
 import { ICategory } from '../../../common/models/product.model';
 import { ProductsService } from '../../../services/products.service';
 
@@ -22,7 +21,7 @@ import { ProductsService } from '../../../services/products.service';
 export class CategoryRadioGroupComponent implements OnInit {
   categories = signal<ICategory[] | undefined>(undefined);
   errorMessage: string | null = null;
-  @Output() categorySelected = new EventEmitter<string | null>();
+  @Output() categorySelected = new EventEmitter<ICategory | null>();
 
   private productsService = inject(ProductsService);
   private destroyRef = inject(DestroyRef);
@@ -45,7 +44,7 @@ export class CategoryRadioGroupComponent implements OnInit {
     });
   }
 
-  onCategoryChange(category: string | null) {
+  onCategoryChange(category: ICategory | null) {
     this.categorySelected.emit(category);
   }
 }

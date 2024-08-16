@@ -1,6 +1,11 @@
 <div class="products-page-container">
   <h1>{{ pageTitle }}</h1>
-  <h5>{{ crumbs }}</h5>
+  <p class="crumbs">
+    {{ crumbs }}
+    @if(selectedCategory()){
+    <strong>/ {{ finalCrumb() }}</strong>
+    }
+  </p>
   <div class="flex-container">
     <app-category-radio-group (categorySelected)="onCategorySelected($event)" />
     <div class="products-column">

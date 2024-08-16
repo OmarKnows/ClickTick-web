@@ -3,7 +3,7 @@ import { CategoryRadioGroupComponent } from './category-radio-group/category-rad
 import { CardComponent } from '../../common/components/card/card.component';
 import { PaginatorComponent } from '../../common/components/paginator/paginator.component';
 import { ProductsService } from '../../services/products.service';
-import { IProduct } from '../../common/models/product.model';
+import { ICategory, IProduct } from '../../common/models/product.model';
 
 @Component({
   selector: 'app-products',
@@ -14,8 +14,9 @@ import { IProduct } from '../../common/models/product.model';
 })
 export class ProductsComponent implements OnInit {
   pageTitle = 'Products';
-  crumbs = 'Home / Products / Smart Phones / iPhone';
   errorMessage: string | null = null;
+  crumbs = 'Home / Products ';
+  finalCrumb = signal<string | null>(null);
   products = signal<IProduct[] | undefined>(undefined);
   selectedCategory = signal<string | null>(null);
   totalPages = signal<number>(1);
@@ -55,8 +56,11 @@ export class ProductsComponent implements OnInit {
     this.listProducts(page);
   }
 
-  onCategorySelected(category: string | null) {
-    this.selectedCategory.set(category);
-    this.listProducts(1, category);
+  onCategorySelected(category: ICategory | null) {
+    if (category) {
+      this.selectedCategory.set(category.slug);
+      this.finalCrumb.set(category?.name);
+    }
+    this.listProducts(1, category?.slug);
   }
 }
