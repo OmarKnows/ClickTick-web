@@ -13,14 +13,17 @@ export class ProductsService {
   private httpClient = inject(HttpClient);
   private cachingService = inject(CachingService);
 
-  listProducts(params?: IPaginationParams) {
-    let skip = 0;
+  listProducts(params?: IPaginationParams, category?: string | null) {
+    let url = `${EApi.PRODUCTS}`;
 
-    if (params?.page) {
-      params.page > 1 ? (skip = (params.page - 1) * 10) : (skip = 0);
+    if (category) {
+      url = `${url}/category/${category}`;
     }
 
-    const url = EApi.PRODUCTS + `${skip > 1 ? `?skip=${skip}` : ''}`;
+    if (params?.page && params.page > 1) {
+      url = `${url}?skip=${(params.page - 1) * 10}`;
+    }
+
     const cachedResponse = this.cachingService.get(url);
 
     if (cachedResponse) {

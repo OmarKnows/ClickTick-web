@@ -17,6 +17,7 @@ export class ProductsComponent implements OnInit {
   crumbs = 'Home / Products / Smart Phones / iPhone';
   errorMessage: string | null = null;
   products = signal<IProduct[] | undefined>(undefined);
+  selectedCategory = signal<string | null>(null);
   totalPages = signal<number>(1);
   currentPage = signal<number>(1);
 
@@ -30,11 +31,14 @@ export class ProductsComponent implements OnInit {
     });
   }
 
-  listProducts(page: number = 1) {
+  listProducts(page: number = 1, category: string | null = null) {
     return this.productsService
-      .listProducts({
-        page,
-      })
+      .listProducts(
+        {
+          page,
+        },
+        category
+      )
       .subscribe({
         next: (response) => {
           this.products.set(response.products);
@@ -49,5 +53,10 @@ export class ProductsComponent implements OnInit {
   onPageChange(page: number) {
     this.currentPage.set(page);
     this.listProducts(page);
+  }
+
+  onCategorySelected(category: string | null) {
+    this.selectedCategory.set(category);
+    this.listProducts(1, category);
   }
 }

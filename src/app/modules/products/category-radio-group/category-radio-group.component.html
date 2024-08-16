@@ -1,15 +1,26 @@
 <div class="radio-group">
   <p>Products</p>
   <label>
-    <input type="radio" name="category" [value]="" />
+    <input
+      type="radio"
+      name="category"
+      [value]="null"
+      (change)="onCategoryChange(null)"
+      checked
+    />
     <span class="custom-radio"></span>
     All
   </label>
-  @for(category of tempCategories; track category){
+  @for(category of categories(); track category){
   <label>
-    <input type="radio" name="category" [value]="category" />
+    <input
+      type="radio"
+      name="category"
+      [value]="category"
+      (change)="onCategoryChange(category.slug)"
+    />
     <span class="custom-radio"></span>
-    {{ category | titlecase }}
+    {{ category.name | titlecase }}
   </label>
   }
 </div>

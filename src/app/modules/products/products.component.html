@@ -2,7 +2,7 @@
   <h1>{{ pageTitle }}</h1>
   <h5>{{ crumbs }}</h5>
   <div class="flex-container">
-    <app-category-radio-group />
+    <app-category-radio-group (categorySelected)="onCategorySelected($event)" />
     <div class="products-column">
       <div class="products-grid">
         @for(product of products(); track $index){
