@@ -11,4 +11,12 @@ import { CommonModule } from '@angular/common';
 })
 export class CardComponent {
   product = input.required<IProduct>();
+
+  getStarWidth(rating: number): number {
+    return (rating / 5) * 100;
+  }
+
+  getDiscountedPrice(price: number, discount: number): number {
+    return price - (price * discount) / 100;
+  }
 }

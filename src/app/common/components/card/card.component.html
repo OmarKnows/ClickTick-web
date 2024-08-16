@@ -1,25 +1,47 @@
 <div class="card-container">
+  <div class="discount-badge">-{{ product().discountPercentage }}%</div>
   <div class="image-container">
     <img [src]="product().thumbnail" alt="thumbnail" />
   </div>
   <div class="card-info-container">
     <h3>{{ product().title }}</h3>
-    <p>{{ product().description }}</p>
+    <p class="description">{{ product().description }}</p>
     <div class="discount-container">
-      <del>{{ product().price }} USD</del>
-      <p>{{ product().price }} USD</p>
+      <del>
+        <strong>{{ product().price }}</strong>
+        USD
+      </del>
+      <div>
+        <strong>{{
+          getDiscountedPrice(product().price, product().discountPercentage)
+        }}</strong>
+      </div>
+      USD
     </div>
     <div class="card-info-item">
       <label>Brand:</label>
-      <p>{{ product().brand }}</p>
+      <div>{{ product().brand }}</div>
     </div>
     <div class="card-info-item">
       <label>Category:</label>
-      <p>{{ product().category }}</p>
+      <div>{{ product().category }}</div>
     </div>
     <div class="card-info-item">
       <label>In Stock:</label>
-      <p>{{ product().stock }}</p>
+      <div>{{ product().stock }}</div>
+    </div>
+    <div class="right rating-container">
+      <div class="star-container">
+        <div class="star-gray">★</div>
+        <div
+          class="star-yellow"
+          [ngStyle]="{ width: getStarWidth(product().rating) + '%' }"
+        >
+          ★
+        </div>
+      </div>
+      <div class="numerical-rating">{{ product().rating }}</div>
+      <div class="reviews">({{ product().reviews.length }})</div>
     </div>
     <button>ADD TO CART</button>
   </div>
