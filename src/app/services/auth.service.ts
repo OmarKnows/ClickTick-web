@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable, of } from 'rxjs';
 import { IAuthResponse } from '../common/models/auth.model';
 import { EApi } from '../constants/api';
@@ -10,8 +10,9 @@ import { ELocalStorage } from '../constants/local-storage';
 })
 export class AuthService {
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
+  private httpClient = inject(HttpClient);
 
-  constructor(private http: HttpClient) {
+  constructor() {
     this.isAuthenticatedSubject.next(this.hasToken());
   }
 
@@ -26,7 +27,7 @@ export class AuthService {
   }
 
   login(username: string, password: string): Observable<boolean> {
-    return this.http
+    return this.httpClient
       .post<IAuthResponse>(EApi.AUTH + EApi.LOGIN, {
         username,
         password,
