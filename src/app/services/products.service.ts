@@ -12,12 +12,15 @@ export class ProductsService {
   private httpClient = inject(HttpClient);
 
   listProducts(params?: IPaginationParams) {
+    let skip = 0;
+    if (params?.page) {
+      params.page > 1 ? (skip = (params.page - 1) * 10) : (skip = 0);
+    }
     return this.httpClient
-      .get<IResponse<IProduct, 'products'>>(EApi.PRODUCTS)
+      .get<IResponse<IProduct, 'products'>>(
+        EApi.PRODUCTS + `${skip > 1 ? `?skip=${skip}` : ''}`
+      )
       .pipe(
-        tap((response) => {
-          console.log(response.products);
-        }),
         catchError((error: any) => {
           console.log(error);
           return throwError(() => new Error('An error occurred'));

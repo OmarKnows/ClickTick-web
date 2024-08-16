@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 
 @Component({
   selector: 'app-paginator',
@@ -19,8 +25,14 @@ export class PaginatorComponent {
     this.updateVisiblePages();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['totalPages']) {
+      this.updateVisiblePages();
+    }
+  }
+
   private updateVisiblePages() {
-    const maxVisiblePages = 5; // Adjust as needed
+    const maxVisiblePages = 5;
     const startPage = Math.max(
       1,
       this.currentPage - Math.floor(maxVisiblePages / 2)

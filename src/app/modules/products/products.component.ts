@@ -15,8 +15,10 @@ import { IProduct } from '../../common/models/product.model';
 export class ProductsComponent implements OnInit {
   pageTitle = 'Products';
   crumbs = 'Home / Products / Smart Phones / iPhone';
+  errorMessage: string | null = null;
   products = signal<IProduct[] | undefined>(undefined);
   totalPages = signal<number>(1);
+  currentPage = signal<number>(1);
 
   private productsService = inject(ProductsService);
   private destroyRef = inject(DestroyRef);
@@ -28,13 +30,24 @@ export class ProductsComponent implements OnInit {
     });
   }
 
-  listProducts() {
-    return this.productsService.listProducts().subscribe({
-      next: (response) => {
-        this.products.set(response.products);
-        this.totalPages.set(response.total);
-      },
-      error: (error: Error) => {},
-    });
+  listProducts(page: number = 1) {
+    return this.productsService
+      .listProducts({
+        page,
+      })
+      .subscribe({
+        next: (response) => {
+          this.products.set(response.products);
+          this.totalPages.set(response.total);
+        },
+        error: () => {
+          this.errorMessage = 'Failed to load products';
+        },
+      });
+  }
+
+  onPageChange(page: number) {
+    this.currentPage.set(page);
+    this.listProducts(page);
   }
 }
