@@ -1,6 +1,5 @@
 import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { CategoryRadioGroupComponent } from './category-radio-group/category-radio-group.component';
-import { products } from './tempProducts';
 import { CardComponent } from '../../common/components/card/card.component';
 import { PaginatorComponent } from '../../common/components/paginator/paginator.component';
 import { ProductsService } from '../../services/products.service';
@@ -18,8 +17,6 @@ export class ProductsComponent implements OnInit {
   crumbs = 'Home / Products / Smart Phones / iPhone';
   products = signal<IProduct[] | undefined>(undefined);
   totalPages = signal<number>(1);
-
-  tempProducts = products;
 
   private productsService = inject(ProductsService);
   private destroyRef = inject(DestroyRef);
