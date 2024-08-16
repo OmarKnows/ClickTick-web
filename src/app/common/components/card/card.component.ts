@@ -17,6 +17,7 @@ export class CardComponent {
   }
 
   getDiscountedPrice(price: number, discount: number): number {
-    return price - (price * discount) / 100;
+    const discountedPrice = price - (price * discount) / 100;
+    return parseFloat(discountedPrice.toFixed(2));
   }
 }
