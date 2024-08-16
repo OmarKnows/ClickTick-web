@@ -1,4 +1,32 @@
-div {
-  margin: 0 auto;
-  width: fit-content;
+@import "../../../../styles.scss";
+
+.paginator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+button {
+  width: 32px;
+  height: 32px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 10px;
+  background-color: white;
+  border: 1px solid #f6f6f6;
+  color: #1e1e1e;
+  font-weight: 500;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.active {
+  background-color: $primary-color;
+  border: none;
 }

@@ -1,1 +1,28 @@
-<div>paginator</div>
+<div class="paginator">
+  <button (click)="previousPage()" [disabled]="currentPage === 1">
+    <img
+      [src]="
+        currentPage === 1
+          ? 'assets/icons/left-disabled.svg'
+          : 'assets/icons/left-enabled.svg'
+      "
+      class="arrow"
+    />
+  </button>
+  @for(page of visiblePages; track page){
+  <button (click)="goToPage(page)" [ngClass]="{ active: page === currentPage }">
+    {{ page }}
+  </button>
+  }
+  <span *ngIf="currentPage < totalPages - 2">...</span>
+  <button (click)="nextPage()" [disabled]="currentPage === totalPages">
+    <img
+      [src]="
+        currentPage === totalPages
+          ? 'assets/icons/right-disabled.svg'
+          : 'assets/icons/right-enabled.svg'
+      "
+      class="arrow"
+    />
+  </button>
+</div>
