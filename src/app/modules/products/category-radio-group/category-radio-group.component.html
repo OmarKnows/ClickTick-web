@@ -1,1 +1,15 @@
-<div>categories</div>
+<div class="radio-group">
+  <p>Products</p>
+  <label>
+    <input type="radio" name="category" [value]="" />
+    <span class="custom-radio"></span>
+    All
+  </label>
+  @for(category of tempCategories; track category){
+  <label>
+    <input type="radio" name="category" [value]="category" />
+    <span class="custom-radio"></span>
+    {{ category | titlecase }}
+  </label>
+  }
+</div>
