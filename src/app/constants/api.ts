@@ -1,5 +1,7 @@
 export enum EApi {
-  AUTH = '/auth',
+  AUTH = 'auth/',
+  LOGIN = 'login',
+
   PRODUCTS = '/products',
 }
 

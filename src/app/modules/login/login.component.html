@@ -4,15 +4,20 @@
   </div>
   <h1>Log in to your account</h1>
   <h3>Welcome back! Please enter your details.</h3>
-  <form>
+  <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
     <div>
-      <label>Email</label>
-      <input type="email" placeholder="Enter your email" />
+      <label>Username</label>
+      <input
+        type="text"
+        placeholder="Enter your username"
+        ngModel
+        name="username"
+      />
     </div>
     <div>
       <label>Password</label>
-      <input type="password" placeholder="••••••••" />
+      <input type="password" placeholder="••••••••" ngModel name="password" />
     </div>
-    <button type="button" [routerLink]="productsUrl">Sign In</button>
+    <button>Sign In</button>
   </form>
 </div>

@@ -11,10 +11,10 @@ import { IAuthResponse } from '../common/models/auth.model';
 export class AuthService {
   private httpClient = inject(HttpClient);
 
-  login(email: string, password: string) {
+  login(username: string, password: string) {
     return this.httpClient
-      .post<IAuthResponse>(EApi.AUTH + '/login', {
-        email,
+      .post<IAuthResponse>(EApi.AUTH + EApi.LOGIN, {
+        username,
         password,
       })
       .pipe(
