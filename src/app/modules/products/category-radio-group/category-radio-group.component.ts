@@ -21,7 +21,7 @@ import { ProductsService } from '../../../services/products.service';
 export class CategoryRadioGroupComponent implements OnInit {
   categories = signal<ICategory[] | undefined>(undefined);
   errorMessage: string | null = null;
-  @Output() categorySelected = new EventEmitter<ICategory | null>();
+  @Output() categorySelected = new EventEmitter<ICategory>();
 
   private productsService = inject(ProductsService);
   private destroyRef = inject(DestroyRef);
@@ -44,7 +44,7 @@ export class CategoryRadioGroupComponent implements OnInit {
     });
   }
 
-  onCategoryChange(category: ICategory | null) {
+  onCategoryChange(category: ICategory) {
     this.categorySelected.emit(category);
   }
 }

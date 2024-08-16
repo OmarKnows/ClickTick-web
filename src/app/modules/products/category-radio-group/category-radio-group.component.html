@@ -4,8 +4,14 @@
     <input
       type="radio"
       name="category"
-      [value]="null"
-      (change)="onCategoryChange(null)"
+      [value]=""
+      (change)="
+        onCategoryChange({
+          name: '',
+          slug: '',
+          url: ''
+        })
+      "
       checked
     />
     <span class="custom-radio"></span>

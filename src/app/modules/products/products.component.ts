@@ -16,7 +16,7 @@ export class ProductsComponent implements OnInit {
   pageTitle = 'Products';
   errorMessage: string | null = null;
   crumbs = 'Home / Products ';
-  finalCrumb = signal<string | null>(null);
+  finalCrumb = signal<string>('');
   products = signal<IProduct[] | undefined>(undefined);
   selectedCategory = signal<string | null>(null);
   totalPages = signal<number>(1);
@@ -56,11 +56,9 @@ export class ProductsComponent implements OnInit {
     this.listProducts(page);
   }
 
-  onCategorySelected(category: ICategory | null) {
-    if (category) {
-      this.selectedCategory.set(category.slug);
-      this.finalCrumb.set(category?.name);
-    }
+  onCategorySelected(category: ICategory) {
+    this.finalCrumb.set(category?.name);
+    this.selectedCategory.set(category.slug);
     this.listProducts(1, category?.slug);
   }
 }
