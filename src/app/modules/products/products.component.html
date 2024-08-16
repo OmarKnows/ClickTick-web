@@ -5,7 +5,7 @@
     <app-category-radio-group />
     <div class="products-column">
       <div class="products-grid">
-        @for(product of tempProducts; track $index){
+        @for(product of products(); track $index){
         <app-card [product]="product" />
         }
       </div>
