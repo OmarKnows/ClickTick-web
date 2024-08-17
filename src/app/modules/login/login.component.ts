@@ -12,30 +12,15 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
-  productsUrl = ERoutes.PRODUCTS;
   errorMessage: string | null = null;
 
   private authService = inject(AuthService);
   private router = inject(Router);
 
   onSubmit(form: NgForm) {
+    // Login the user and navigate to the products page
     this.authService
       .login(form.value.username, form.value.password)
-      .subscribe((success) => {
-        if (success) {
-          this.router.navigate([ERoutes.PRODUCTS]);
-        } else {
-          this.errorMessage = 'Invalid credentials';
-        }
-      });
-
-    this.authService.login(form.value.username, form.value.password).subscribe({
-      error: (err) => {
-        console.error('Login failed', err);
-      },
-      complete: () => {
-        this.router.navigate([this.productsUrl]);
-      },
-    });
+      .subscribe();
   }
 }
