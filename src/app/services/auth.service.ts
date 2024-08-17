@@ -34,7 +34,9 @@ export class AuthService {
       })
       .pipe(
         map((response) => {
-          this.storeTokens(response.token, response.refreshToken);
+          const { token, refreshToken, ...userData } = response;
+          this.storeTokens(token, refreshToken);
+          this.storeUserData(userData);
           this.isAuthenticatedSubject.next(true);
           return true;
         }),
@@ -44,6 +46,7 @@ export class AuthService {
 
   logout(): void {
     this.removeTokens();
+    this.removeUserData();
     this.isAuthenticatedSubject.next(false);
   }
 
@@ -59,6 +62,16 @@ export class AuthService {
   private removeTokens(): void {
     localStorage.removeItem(ELocalStorage.ACCESS_TOKEN);
     localStorage.removeItem(ELocalStorage.REFRESH_TOKEN);
+  }
+
+  private storeUserData(
+    userData: Omit<IAuthResponse, 'token' | 'refreshToken'>
+  ): void {
+    localStorage.setItem(ELocalStorage.USER_DATA, JSON.stringify(userData));
+  }
+
+  private removeUserData(): void {
+    localStorage.removeItem(ELocalStorage.USER_DATA);
   }
 
   private hasToken(): boolean {
