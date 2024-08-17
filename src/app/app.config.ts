@@ -5,6 +5,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { provideStore } from '@ngrx/store';
 import { routes } from './app.routes';
 import { ApiInterceptor } from './interceptors/api.interceptor';
+import { cartReducer } from './store/cart/cart.reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -12,6 +13,8 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([ApiInterceptor])),
     provideRouter(routes),
     provideAnimationsAsync(),
-    provideStore(),
+    provideStore({
+      cart: cartReducer,
+    }),
   ],
 };
