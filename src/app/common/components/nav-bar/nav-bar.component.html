@@ -15,8 +15,8 @@
   </div>
   <div class="cart-container">
     <img src="assets/icons/cart.svg" />
-    @if(cartItems()>0){
-    <div class="cart-item-counter">{{ cartItems() }}</div>
+    @if(cartItems$ | async){
+    <div class="cart-item-counter">{{ cartItems$ | async }}</div>
     }
   </div>
   <a>Account</a>

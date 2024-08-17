@@ -43,6 +43,6 @@
       <div class="numerical-rating">{{ product().rating }}</div>
       <div class="reviews">({{ product().reviews.length }})</div>
     </div>
-    <button>ADD TO CART</button>
+    <button (click)="onAddToCart(product().id)">ADD TO CART</button>
   </div>
 </div>

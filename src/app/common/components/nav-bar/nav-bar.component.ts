@@ -3,11 +3,14 @@ import { AuthService } from '../../../services/auth.service';
 import { CartService } from '../../../services/cart.service';
 import { Router } from '@angular/router';
 import { ELocalStorage } from '../../../constants/local-storage';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-nav-bar',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.scss'],
 })
@@ -15,9 +18,15 @@ export class NavBarComponent implements OnInit {
   authService = inject(AuthService);
   cartService = inject(CartService);
   router = inject(Router);
+  store = inject(Store);
 
   cartItems = signal<number>(0);
   isLoggedIn = signal<boolean>(false);
+  cartItems$: Observable<number>;
+
+  constructor() {
+    this.cartItems$ = this.store.select('cart');
+  }
 
   ngOnInit(): void {
     this.authService.isAuthenticated().subscribe((isAuth) => {
