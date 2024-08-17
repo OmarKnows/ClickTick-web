@@ -18,46 +18,43 @@ export class ProductsService {
     category?: string | null,
     search?: string | null
   ) {
-    let url = `${EApi.PRODUCTS}`;
+    let urlParts: string[] = [EApi.PRODUCTS];
 
     if (search) {
-      url = `${url}/search?q=${search}`;
+      urlParts.push(`/search?q=${search}`);
     }
 
     if (category) {
-      url = `${url}/category/${category}`;
+      urlParts.push(`/category/${category}`);
     }
+
+    const queryParams = new URLSearchParams();
 
     if (params?.page && params.page > 1) {
-      url = `${url}?skip=${(params.page - 1) * 10}`;
+      queryParams.set('skip', `${(params.page - 1) * 10}`);
     }
 
-    const cachedResponse = this.cachingService.get(url);
+    const url = `${urlParts.join('')}${
+      queryParams.toString() ? '?' + queryParams : ''
+    }`;
 
-    if (cachedResponse) {
-      return cachedResponse;
-    } else {
-      return this.httpClient.get<IResponse<IProduct, 'products'>>(url).pipe(
-        tap((response) => this.cachingService.set(url, response)),
-        catchError((error: any) => {
-          return throwError(() => new Error(error.message));
-        })
-      );
-    }
+    return this.fetchAndCacheData<IResponse<IProduct, 'products'>>(url);
   }
 
   listCategories() {
-    const url = EApi.PRODUCTS + EApi.CATEGORIES;
+    const url = `${EApi.PRODUCTS}${EApi.CATEGORIES}`;
+    return this.fetchAndCacheData<ICategory[]>(url);
+  }
+
+  private fetchAndCacheData<T>(url: string) {
     const cachedResponse = this.cachingService.get(url);
 
     if (cachedResponse) {
       return cachedResponse;
     } else {
-      return this.httpClient.get<ICategory[]>(url).pipe(
+      return this.httpClient.get<T>(url).pipe(
         tap((response) => this.cachingService.set(url, response)),
-        catchError((error: any) => {
-          return throwError(() => new Error(error.message));
-        })
+        catchError((error: any) => throwError(() => new Error(error.message)))
       );
     }
   }
