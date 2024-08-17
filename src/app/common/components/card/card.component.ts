@@ -15,8 +15,9 @@ export class CardComponent {
   product = input.required<IProduct>();
   store = inject(Store);
 
-  getStarWidth(rating: number): number {
-    return (rating / 5) * 100;
+  getClipPath(rating: number): string {
+    const percentage = (rating / 5) * 100;
+    return `inset(0 ${100 - percentage}% 0 0)`;
   }
 
   getDiscountedPrice(price: number, discount: number): number {

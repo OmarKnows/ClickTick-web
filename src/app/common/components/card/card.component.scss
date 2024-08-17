@@ -115,18 +115,18 @@ button {
   overflow: hidden;
 }
 
-.star-gray {
-  color: #213c534d;
-}
-
+.star-gray,
 .star-yellow {
-  color: #f4b000;
   position: absolute;
   top: 0;
   left: 0;
+  width: 100%;
   height: 100%;
-  white-space: nowrap;
-  overflow: hidden;
+  object-fit: cover;
+}
+
+.star-yellow {
+  clip-path: var(--clip-path);
 }
 
 .numerical-rating {

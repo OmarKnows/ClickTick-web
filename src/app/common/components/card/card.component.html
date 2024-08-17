@@ -32,13 +32,17 @@
     </div>
     <div class="right rating-container">
       <div class="star-container">
-        <div class="star-gray">★</div>
-        <div
+        <img
+          src="assets/icons/gray-star.svg"
+          alt="Gray Star"
+          class="star-gray"
+        />
+        <img
+          src="assets/icons/yellow-star.svg"
+          alt="Yellow Star"
           class="star-yellow"
-          [ngStyle]="{ width: getStarWidth(product().rating) + '%' }"
-        >
-          ★
-        </div>
+          [ngStyle]="{ 'clip-path': getClipPath(product().rating) }"
+        />
       </div>
       <div class="numerical-rating">{{ product().rating }}</div>
       <div class="reviews">({{ product().reviews.length }})</div>
