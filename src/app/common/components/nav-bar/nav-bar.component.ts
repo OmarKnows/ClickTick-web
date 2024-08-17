@@ -1,19 +1,19 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
-import { CartService } from '../../../services/cart.service'; // Import CartService
+import { CartService } from '../../../services/cart.service';
 import { Router } from '@angular/router';
-import { ELocalStorage } from '../../../constants/local-storage'; // Import ELocalStorage enum
+import { ELocalStorage } from '../../../constants/local-storage';
 
 @Component({
   selector: 'app-nav-bar',
   standalone: true,
   imports: [],
   templateUrl: './nav-bar.component.html',
-  styleUrls: ['./nav-bar.component.scss'], // Corrected `styleUrl` to `styleUrls`
+  styleUrls: ['./nav-bar.component.scss'],
 })
 export class NavBarComponent implements OnInit {
   authService = inject(AuthService);
-  cartService = inject(CartService); // Inject CartService
+  cartService = inject(CartService);
   router = inject(Router);
 
   cartItems = signal<number>(0);
@@ -43,7 +43,7 @@ export class NavBarComponent implements OnInit {
   private getCart(userId: number) {
     this.cartService.getCart(userId).subscribe({
       next: (response) => {
-        this.cartItems.set(response.carts[1].products.length); // Assuming response is an array of cart items
+        this.cartItems.set(response.carts[1]?.products?.length);
         console.log('Cart data retrieved:', response);
       },
       error: (error) => {
