@@ -15,6 +15,10 @@ export class CardComponent {
   product = input.required<IProduct>();
   store = inject(Store);
 
+  //this function is responsible of changing the rating to a percentage
+  //this percentage is then used to crop the yellow star
+  //the yellow star is placed ontop of the gray star
+  //this ends up giving the illusion that there is 1 star partially yellow and partially gray
   getClipPath(rating: number): string {
     const percentage = (rating / 5) * 100;
     return `inset(0 ${100 - percentage}% 0 0)`;
@@ -25,6 +29,8 @@ export class CardComponent {
     return parseFloat(discountedPrice.toFixed(2));
   }
 
+  //this function simply increments the quantity of the product in the cart
+  //since there is no endpoint to add to the cart, we are simply incrementing the quantity
   onAddToCart(productId: number) {
     this.store.dispatch(addToCart());
   }
