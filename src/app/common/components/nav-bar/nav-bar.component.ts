@@ -6,6 +6,7 @@ import { ELocalStorage } from '../../../constants/local-storage';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { CommonModule } from '@angular/common';
+import { ERoutes } from '../../../constants/routes';
 
 @Component({
   selector: 'app-nav-bar',
@@ -68,5 +69,10 @@ export class NavBarComponent implements OnInit {
       return user.id;
     }
     return null;
+  }
+
+  onLogout() {
+    this.authService.logout();
+    this.router.navigate([ERoutes.LOGIN]);
   }
 }

@@ -19,7 +19,7 @@
     <div class="cart-item-counter">{{ cartItems$ | async }}</div>
     }
   </div>
-  <a>Account</a>
+  <a (click)="onLogout()">Log Out</a>
   } @else {
   <a class="right">Log in</a>
   }
