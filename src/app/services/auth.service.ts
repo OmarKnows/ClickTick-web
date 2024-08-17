@@ -5,46 +5,40 @@ import { BehaviorSubject, catchError, map, Observable, of } from 'rxjs';
 import { IAuthResponse } from '../common/models/auth.model';
 import { EApi } from '../constants/api';
 import { ELocalStorage } from '../constants/local-storage';
+import { ERoutes } from '../constants/routes';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
+  private isAuthenticatedSubject = new BehaviorSubject<boolean>(
+    this.hasValidToken()
+  );
   private httpClient = inject(HttpClient);
   private router = inject(Router);
 
   constructor() {
-    this.isAuthenticatedSubject.next(this.hasValidToken());
+    // Check if the user is authenticated when the service is initialized
     this.navigateIfAuthenticated();
   }
 
-  isLoggedIn(): boolean {
-    return this.hasValidToken();
+  // Return an observable that emits the authentication status
+  isAuthenticated(): Observable<boolean> {
+    return this.isAuthenticatedSubject.asObservable();
   }
 
-  private hasValidToken(): boolean {
-    const token = localStorage.getItem(ELocalStorage.ACCESS_TOKEN);
-    return !!token && !this.isTokenExpired(token);
-  }
-
-  private isTokenExpired(token: string): boolean {
-    try {
-      const expiry = JSON.parse(atob(token.split('.')[1])).exp;
-      return Math.floor(Date.now() / 1000) >= expiry;
-    } catch (error) {
-      return true;
-    }
-  }
-
+  // Login the user and store the tokens in the local storage and navigate to the products page
   login(username: string, password: string): Observable<boolean> {
     return this.httpClient
       .post<IAuthResponse>(EApi.AUTH + EApi.LOGIN, { username, password })
       .pipe(
-        map((response) => {
-          const { token, refreshToken, ...userData } = response;
-          this.storeTokens(token, refreshToken);
-          this.storeUserData(userData);
+        map(({ token, refreshToken, ...userData }) => {
+          localStorage.setItem(ELocalStorage.ACCESS_TOKEN, token);
+          localStorage.setItem(ELocalStorage.REFRESH_TOKEN, refreshToken);
+          localStorage.setItem(
+            ELocalStorage.USER_DATA,
+            JSON.stringify(userData)
+          );
           this.isAuthenticatedSubject.next(true);
           this.navigateIfAuthenticated();
           return true;
@@ -56,47 +50,35 @@ export class AuthService {
       );
   }
 
+  // Logout the user by removing the tokens from the local storage and navigate to the login page
   logout(): void {
-    this.removeTokens();
-    this.removeUserData();
+    localStorage.removeItem(ELocalStorage.ACCESS_TOKEN);
+    localStorage.removeItem(ELocalStorage.REFRESH_TOKEN);
+    localStorage.removeItem(ELocalStorage.USER_DATA);
     this.isAuthenticatedSubject.next(false);
+    this.router.navigate([ERoutes.LOGIN]);
   }
 
-  isAuthenticated(): Observable<boolean> {
-    return this.isAuthenticatedSubject.asObservable();
+  // Check if the token is valid by decoding it and comparing the expiration time
+  private hasValidToken(): boolean {
+    const token = localStorage.getItem(ELocalStorage.ACCESS_TOKEN);
+    return !!token && !this.isTokenExpired(token);
   }
 
+  // Decode the token and check if it's expired
+  private isTokenExpired(token: string): boolean {
+    try {
+      const { exp } = JSON.parse(atob(token.split('.')[1]));
+      return Math.floor(Date.now() / 1000) >= exp;
+    } catch {
+      return true;
+    }
+  }
+
+  // Navigate to the products page if the user is authenticated
   private navigateIfAuthenticated(): void {
-    if (this.isLoggedIn()) {
-      this.router.navigate(['/products']);
+    if (this.hasValidToken()) {
+      this.router.navigate([ERoutes.PRODUCTS]);
     }
-  }
-
-  private setLocalStorage(key: string, value: string | null): void {
-    if (value) {
-      localStorage.setItem(key, value);
-    } else {
-      localStorage.removeItem(key);
-    }
-  }
-
-  private storeTokens(accessToken: string, refreshToken: string): void {
-    this.setLocalStorage(ELocalStorage.ACCESS_TOKEN, accessToken);
-    this.setLocalStorage(ELocalStorage.REFRESH_TOKEN, refreshToken);
-  }
-
-  private removeTokens(): void {
-    this.setLocalStorage(ELocalStorage.ACCESS_TOKEN, null);
-    this.setLocalStorage(ELocalStorage.REFRESH_TOKEN, null);
-  }
-
-  private storeUserData(
-    userData: Omit<IAuthResponse, 'token' | 'refreshToken'>
-  ): void {
-    this.setLocalStorage(ELocalStorage.USER_DATA, JSON.stringify(userData));
-  }
-
-  private removeUserData(): void {
-    this.setLocalStorage(ELocalStorage.USER_DATA, null);
   }
 }
