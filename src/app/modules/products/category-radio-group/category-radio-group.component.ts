@@ -19,14 +19,14 @@ import { ProductsService } from '../../../services/products.service';
   styleUrl: './category-radio-group.component.scss',
 })
 export class CategoryRadioGroupComponent implements OnInit {
-  categories = signal<ICategory[] | undefined>(undefined);
-  errorMessage: string | null = null;
-  @Output() categorySelected = new EventEmitter<ICategory>();
-
   private productsService = inject(ProductsService);
   private destroyRef = inject(DestroyRef);
+  @Output() categorySelected = new EventEmitter<ICategory>();
+  categories = signal<ICategory[] | undefined>(undefined);
+  errorMessage = signal<string | null>(null);
 
   ngOnInit(): void {
+    // Load the categories when the component is initialized
     const subscription = this.listCategories();
     this.destroyRef.onDestroy(() => {
       subscription.unsubscribe();
@@ -39,12 +39,13 @@ export class CategoryRadioGroupComponent implements OnInit {
         this.categories.set(response);
       },
       error: () => {
-        this.errorMessage = 'Failed to load categories';
+        this.errorMessage.set('Failed to load categories');
       },
     });
   }
 
   onCategoryChange(category: ICategory) {
+    // Emit the selected category for the filter to listen
     this.categorySelected.emit(category);
   }
 }

@@ -22,16 +22,19 @@ export class NavBarComponent implements OnInit {
   cartItems$: Observable<number>;
 
   constructor() {
+    //setting the cart items from the ngrx store
     this.cartItems$ = this.store.select('cart');
   }
 
   ngOnInit(): void {
+    //checking if the user is authenticated
     this.authService.isAuthenticated().subscribe((isAuth) => {
       this.isLoggedIn.set(isAuth);
     });
   }
 
   onSearch(event: Event) {
+    //when the user types in the search bar, we are update the query parameter
     const query = (event.target as HTMLInputElement).value;
     this.router.navigate([], {
       queryParams: { search: query || null },

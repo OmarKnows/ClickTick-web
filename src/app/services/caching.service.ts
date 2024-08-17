@@ -9,10 +9,12 @@ export class CachingService {
 
   constructor() {}
 
+  // Get the value from the cache if it exists
   get(key: string): Observable<any> | null {
     return this.cache.get(key) ? of(this.cache.get(key)) : null;
   }
 
+  // Set the value in the cache
   set(key: string, value: any): void {
     this.cache.set(key, value);
   }

@@ -22,16 +22,19 @@ export class PaginatorComponent {
   visiblePages: number[] = [];
 
   ngOnInit() {
+    // Initialize the visible pages
     this.updateVisiblePages();
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    // Update the visible pages when the total pages change
     if (changes['totalPages']) {
       this.updateVisiblePages();
     }
   }
 
   private updateVisiblePages() {
+    // Calculate the visible pages based on the current page
     const maxVisiblePages = 5;
     const startPage = Math.max(
       1,
@@ -50,6 +53,7 @@ export class PaginatorComponent {
   }
 
   nextPage() {
+    // Go to the next page if possible
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
       this.updateVisiblePages();
@@ -59,6 +63,7 @@ export class PaginatorComponent {
   }
 
   previousPage() {
+    // Go to the previous page if possible
     if (this.currentPage > 1) {
       this.currentPage--;
       this.updateVisiblePages();
@@ -68,6 +73,7 @@ export class PaginatorComponent {
   }
 
   goToPage(page: number) {
+    // Go to a specific page if possible
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
       this.updateVisiblePages();
