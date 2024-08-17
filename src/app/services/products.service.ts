@@ -13,8 +13,16 @@ export class ProductsService {
   private httpClient = inject(HttpClient);
   private cachingService = inject(CachingService);
 
-  listProducts(params?: IPaginationParams, category?: string | null) {
+  listProducts(
+    params?: IPaginationParams,
+    category?: string | null,
+    search?: string | null
+  ) {
     let url = `${EApi.PRODUCTS}`;
+
+    if (search) {
+      url = `${url}/search?q=${search}`;
+    }
 
     if (category) {
       url = `${url}/category/${category}`;
