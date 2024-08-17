@@ -12,7 +12,7 @@ import {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './paginator.component.html',
-  styleUrl: './paginator.component.scss',
+  styleUrls: ['./paginator.component.scss'],
 })
 export class PaginatorComponent {
   @Input() totalPages: number = 0;
@@ -45,11 +45,16 @@ export class PaginatorComponent {
     }
   }
 
+  private scrollToTop(): void {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
   nextPage() {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
       this.updateVisiblePages();
       this.pageChange.emit(this.currentPage);
+      this.scrollToTop();
     }
   }
 
@@ -58,6 +63,7 @@ export class PaginatorComponent {
       this.currentPage--;
       this.updateVisiblePages();
       this.pageChange.emit(this.currentPage);
+      this.scrollToTop();
     }
   }
 
@@ -66,6 +72,7 @@ export class PaginatorComponent {
       this.currentPage = page;
       this.updateVisiblePages();
       this.pageChange.emit(this.currentPage);
+      this.scrollToTop();
     }
   }
 }
