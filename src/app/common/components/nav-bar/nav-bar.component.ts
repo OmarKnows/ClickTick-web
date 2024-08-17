@@ -1,25 +1,34 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
+import { CartService } from '../../../services/cart.service'; // Import CartService
 import { Router } from '@angular/router';
+import { ELocalStorage } from '../../../constants/local-storage'; // Import ELocalStorage enum
 
 @Component({
   selector: 'app-nav-bar',
   standalone: true,
   imports: [],
   templateUrl: './nav-bar.component.html',
-  styleUrl: './nav-bar.component.scss',
+  styleUrls: ['./nav-bar.component.scss'], // Corrected `styleUrl` to `styleUrls`
 })
 export class NavBarComponent implements OnInit {
   authService = inject(AuthService);
+  cartService = inject(CartService); // Inject CartService
   router = inject(Router);
 
-  isLoggedIn = false;
-
-  tempCartItems = 3;
+  cartItems = signal<number>(0);
+  isLoggedIn = signal<boolean>(false);
 
   ngOnInit(): void {
     this.authService.isAuthenticated().subscribe((isAuth) => {
-      this.isLoggedIn = isAuth;
+      this.isLoggedIn.set(isAuth);
+
+      if (this.isLoggedIn()) {
+        const userId = this.getUserIdFromLocalStorage();
+        if (userId) {
+          this.getCart(userId);
+        }
+      }
     });
   }
 
@@ -29,5 +38,26 @@ export class NavBarComponent implements OnInit {
       queryParams: { search: query || null },
       queryParamsHandling: 'merge',
     });
+  }
+
+  private getCart(userId: number) {
+    this.cartService.getCart(userId).subscribe({
+      next: (response) => {
+        this.cartItems.set(response.carts[1].products.length); // Assuming response is an array of cart items
+        console.log('Cart data retrieved:', response);
+      },
+      error: (error) => {
+        console.error('Error fetching cart data:', error);
+      },
+    });
+  }
+
+  private getUserIdFromLocalStorage(): number | null {
+    const userData = localStorage.getItem(ELocalStorage.USER_DATA);
+    if (userData) {
+      const user = JSON.parse(userData);
+      return user.id;
+    }
+    return null;
   }
 }

@@ -6,7 +6,7 @@
     <p>ClickTick</p>
   </div>
   <a>Home</a>
-  @if(isLoggedIn){
+  @if(isLoggedIn()){
   <div class="search-input right">
     <div>
       <img src="assets/icons/search.svg" />
@@ -15,7 +15,9 @@
   </div>
   <div class="cart-container">
     <img src="assets/icons/cart.svg" />
-    <div class="cart-item-counter">{{ tempCartItems }}</div>
+    @if(cartItems()>0){
+    <div class="cart-item-counter">{{ cartItems() }}</div>
+    }
   </div>
   <a>Account</a>
   } @else {
